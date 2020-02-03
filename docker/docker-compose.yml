@@ -1,0 +1,13 @@
+version: '3.7'
+
+# ../src_cpp:/usr/src/app
+
+services:
+  wasm:
+    container_name: wasm3
+    build:
+      context: .
+      dockerfile: emscript.Dockerfile
+    volumes:
+      - ../logic:/usr/src/app
+      - ../public/wasm:/usr/src/target

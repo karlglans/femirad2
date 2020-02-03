@@ -1,0 +1,5 @@
+docker run --rm -v K:/prog/projekt/femirad2/src:/usr/src/femirad/src trzeci/emscripten emcc /usr/src/femirad/src/c/helloworld.cpp -o /usr/src/femirad/src/compiled/helloworld.js
+
+
+
+docker run --rm -v K:/prog/projekt/femirad2/src:/usr/src/femirad/src trzeci/emscripten emcc /usr/src/femirad/src/c/helloworld.cpp -o /usr/src/femirad/src/compiled/helloworld.js -s "EXPORTED_FUNCTIONS=['_main', 'add']"
