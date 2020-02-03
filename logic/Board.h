@@ -3,6 +3,8 @@
 
 #include "BoardRow.h"
 
+#define EMPTY_CELL 0
+
 class Board
 {
   static int row;
