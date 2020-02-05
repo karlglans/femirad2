@@ -46,7 +46,7 @@ export function markEmptyCell(cellIdx) {
  */
 export function doNextMove() {
   const searchDepth = 3;
-  return window.Module.ccall('doNextMove', 'i32', ['i32', '*'], [searchDepth, boarBufferPtr]) === 0;
+  return window.Module.ccall('doNextMove', 'i32', ['i32', '*'], [searchDepth, boarBufferPtr]);
 }
 
 export function copyBoardBuffer() {

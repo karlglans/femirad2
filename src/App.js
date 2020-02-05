@@ -32,11 +32,15 @@ function App() {
       function doStepWithTimout() {
         setFinishedStep(startedStep);
         setTimeout(() => {
-          const gameIsOver = doNextMove();
+          const change = doNextMove();
+          const gameIsOver = change === -1;
           setIsAllowingNextStep(true);
           setCurrentPlayer(currentPlayer === 1? 2: 1);
           setGameOver(gameIsOver);
           setBoardArr(copyBoardBuffer());
+          if (!gameIsOver) {
+            setLastChangedCellIdx(change);
+          }
         }, 0);
       };
 

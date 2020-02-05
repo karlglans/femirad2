@@ -67,7 +67,7 @@ extern "C" int doNextMove(int depth, char* board_ptr) {
         console.log("doNextMove() gameover");
       });
 #endif
-    return 1;
+    return -1; // 1
   }
   Search search(depth);
   SearchResult sr;
@@ -83,7 +83,7 @@ extern "C" int doNextMove(int depth, char* board_ptr) {
       console.log("doNextMove() acting:", $0, "move:", $1, $2);
     }, actingPlayer, sr.move, sr.value);
 #endif
-  return game->checkForWin(board) ? 0 : 1;
+  return game->checkForWin(board) ? -1 : sr.move;
 }
 
 extern "C" int startNewGame() {
