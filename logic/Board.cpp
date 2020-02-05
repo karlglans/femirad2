@@ -76,10 +76,17 @@ bool Board::isValidMove(const int move) {
   return _board[move] == 0;
 }
 
+void Board::storeGoodCell(short cellIdx, int value) {
+  // goodCellList.store(cellIdx, value);
+}
+
+// TODO idea: just look examine the area around the last changed cell
 int Board::evaluateWin(const int team) {
   const int row = Board::row;
   const char* _board = this->_board;
   int accValue = 0; // consider maybe not accumelate points, instead just return after 5 cells in row
+
+  //goodLookers[0] = -1;
 
   // combines vertical and horizontal 
   int i, j, idxHor = 0, idxVer = 0, horLineCount = 0, verLineCount = 0;
@@ -94,6 +101,11 @@ int Board::evaluateWin(const int team) {
           horLineCount = 0;
         }
       } else {
+        /////// tött
+        //if (horLineCount == 4) {
+        //  storeGoodCell(idxHor, open4row);
+        //}
+        ///////
         horLineCount = 0;
       }
       if (_board[idxVer] == team) {
@@ -103,6 +115,11 @@ int Board::evaluateWin(const int team) {
           verLineCount = 0;
         }
       } else {
+        /////// tött
+        //if (verLineCount == 4) {
+        //  storeGoodCell(idxVer, open4row);
+        //}
+        ///////
         verLineCount = 0;
       }
       // orthogonal steps
@@ -142,6 +159,11 @@ int Board::evaluateWin(const int team) {
         }
       }
       else {
+        /////// tött
+        //if (fallLineCellCount == 4) {
+        //  storeGoodCell(idxFall, open4row);
+        //}
+        ///////
         fallLineCellCount = 0;
       }
       if (_board[idxRise] == team) {
@@ -151,6 +173,11 @@ int Board::evaluateWin(const int team) {
           riseLineCellCount = 0;
         }
       } else {
+        /////// tött
+        //if (riseLineCellCount == 4) {
+        //  storeGoodCell(idxRise, open4row);
+        //}
+        ///////
         riseLineCellCount = 0;
       }
       // vertical steps upwards towards index 0

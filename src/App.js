@@ -17,27 +17,32 @@ function App() {
   const [lastChangedCellIdx, setLastChangedCellIdx] = useState(-1);
   const [gameOver, setGameOver] = useState(false);
   const [boardArr, setBoardArr] = useState(makeBoardArr(16*16));
+  const [startedStep, setStartedStep] = useState(0);
+  const [finishedStep, setFinishedStep] = useState(0);
 
   function handleStep() {
-    if (isAllowingNextStep && !gameOver) {
-      const gameIsOver = doNextMove();
-      setCurrentPlayer(currentPlayer === 1? 2: 1);
-      setGameOver(gameIsOver);
-      setBoardArr(copyBoardBuffer());
+    if (startedStep === finishedStep && isAllowingNextStep) {
+      setIsAllowingNextStep(false);
+      setStartedStep(startedStep + 1);
     }
-    // if (!game.isGameOver()) {
-    //   setIsAllowingNextStep(false);
-    //   setLastChangedCellIdx(-1);
-    //   game.doNextMove()
-    //     .then( (cellIdx) => {
-    //       setGameBoard(game.getGameBoard());
-    //       setIsAllowingNextStep(true);
-    //       setLastChangedCellIdx(cellIdx);
-    //       setGameOver(game.isGameOver());
-    //       setCurrentPlayer(game.currentPlayer());
-    //     });
-    // }
   }
+
+  useEffect( () => {
+    if (startedStep > 0 && startedStep !== finishedStep) {
+      function doStepWithTimout() {
+        setFinishedStep(startedStep);
+        setTimeout(() => {
+          const gameIsOver = doNextMove();
+          setIsAllowingNextStep(true);
+          setCurrentPlayer(currentPlayer === 1? 2: 1);
+          setGameOver(gameIsOver);
+          setBoardArr(copyBoardBuffer());
+        }, 0);
+      };
+
+      doStepWithTimout();
+    }
+  }, [startedStep, finishedStep, currentPlayer, isAllowingNextStep]);
 
   useEffect( () => {
     setTimeout(() => allocBoardBuffer(), 100);
@@ -45,18 +50,13 @@ function App() {
   }, []);
 
   function handleClickCell(cellIdx) {
-    // if (isAllowingNextStep && !game.isGameOver()) {
-    //   game.setCell(cellIdx, 1);
-    //   setLastChangedCellIdx(cellIdx);
-    //   setGameOver(game.isGameOver());
-    //   setCurrentPlayer(game.currentPlayer());
-    //   setGameBoard(game.getGameBoard());
-    // }
     if (isAllowingNextStep && !gameOver) {
       const gameIsOver = markEmptyCell(cellIdx);
       setCurrentPlayer(currentPlayer === 1? 2: 1); // maybe data from game instead
       setGameOver(gameIsOver);
       setBoardArr(copyBoardBuffer());
+      setFinishedStep(startedStep + 1);
+      setStartedStep(startedStep + 1);
     }
   }
 

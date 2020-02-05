@@ -93,9 +93,14 @@ int GamestateNode::generateChildMoves(int depth) {
   int nChildren = GamestateNode::indexGen->makeInToOutSortedListOfSurroundingCells(
     (char*)boardCells, board.getRow(), indexBuffer);
   if (nChildren == 0) {
-    return GamestateNode::indexGen->pickFirstFreeIndexFromCentre(
+    nChildren = GamestateNode::indexGen->pickFirstFreeIndexFromCentre(
       (char*)boardCells, board.getRow(), indexBuffer);
   }
+  if (nChildren != 0) {
+    //GamestateNode::indexGen->moveGoodLookersBeginning(indexBuffer, nChildren, board.getGoodLookers());
+  }
+
+  // moveGoodLookersBegining
   return nChildren;
 
   //for (int cc = 0; cc < max_board_cells; cc++) {

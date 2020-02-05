@@ -38,3 +38,27 @@ TEST(IndexGenerator, makeInToOutSortedListOfSurroundingCells) {
   EXPECT_EQ(result[7], 3); // bord index 3 is the neighbure (to cell 6) most distant from the bord centre
   EXPECT_EQ(nResult, 8);
 }
+
+TEST(IndexGenerator, moveGoodLookersBegining_one_good_looker) {
+  short result[] = { 1, 12, 13, 4, 5, 6 };
+  short goodLookers[] = { 13, -1, 3, 4, 5, 6 };
+  const int row = 4;
+  IndexGenerator indexGen(row);
+  int nResult = indexGen.moveGoodLookersBegining(result, 6, goodLookers);
+  
+  EXPECT_EQ(result[0], 13);
+  EXPECT_EQ(result[1], 12);
+  EXPECT_EQ(result[2], 1);
+}
+
+//TEST(IndexGenerator, moveGoodLookersBegining_two_good_looker) {
+//  short result[] = { 1, 12, 13, 4, 5, 6 };
+//  short goodLookers[] = { 13, 3, 4, -1 }; // note 3 is missing in result, should be ok
+//  const int row = 4;
+//  IndexGenerator indexGen(row);
+//  int nResult = indexGen.moveGoodLookersBegining(result, 6, goodLookers);
+//
+//  EXPECT_EQ(result[0], 13);
+//  EXPECT_EQ(result[1], 12);
+//  EXPECT_EQ(result[2], 1);
+//}

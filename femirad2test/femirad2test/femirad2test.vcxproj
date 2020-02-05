@@ -38,6 +38,7 @@
     <ClInclude Include="..\..\logic\config.h" />
     <ClInclude Include="..\..\logic\Game.h" />
     <ClInclude Include="..\..\logic\GamestateNode.h" />
+    <ClInclude Include="..\..\logic\GoodCellList.h" />
     <ClInclude Include="..\..\logic\IndexGenerator.h" />
     <ClInclude Include="..\..\logic\ranking.h" />
     <ClInclude Include="..\..\logic\Search.h" />
@@ -46,9 +47,11 @@
     <ClCompile Include="..\..\logic\Board.cpp" />
     <ClCompile Include="..\..\logic\Game.cpp" />
     <ClCompile Include="..\..\logic\GamestateNode.cpp" />
+    <ClCompile Include="..\..\logic\GoodCellList.cpp" />
     <ClCompile Include="..\..\logic\IndexGenerator.cpp" />
     <ClCompile Include="..\..\logic\Search.cpp" />
     <ClCompile Include="Board.test.cpp" />
+    <ClCompile Include="GoodCellList.test.cpp" />
     <ClCompile Include="IndexGenerator.test.cpp" />
     <ClCompile Include="Search.test.cpp" />
   </ItemGroup>
