@@ -74,7 +74,7 @@ void Search::doSearch(SearchResult & sr, char actingPlayerStart, Board * board)
   node0->getBoard()->copyBoard(board);
   node0->setMove(-1); // the move is already written into the board
 
-  const int depth = 7; // 3, 5, 7 seems to work
+  const int depth = 5; // 3, 5, 7 seems to work
 
   searchResult.move = -2; // indicating no move found
   actingPlayer = actingPlayerStart;
