@@ -7,19 +7,14 @@ SearchResult searchResult;
 char actingPlayer;
 char oppPlayer;
 
-const int g_depth = 2;
 const int highValue = fiveInRow * 100;
 
 
-int minmax(GamestateNode* node, int depth, bool shouldMax, char plyPlayer, int alpha, int beta) {
+int minmax(GamestateNode* const node, int depth, bool shouldMax, char plyPlayer, int alpha, int beta) {
   node->applyMoveToBoard(plyPlayer);  
-
-  //if (node->_move == 152 && depth == 1) {
-  //  int aa = 0;
-  //}
   
   if (node->checkWin(plyPlayer)) {
-    // will reward shortest path to win by subtracting ply
+    // will reward shortest path to win by adding depth
     node->value = plyPlayer == actingPlayer ? fiveInRow + depth : -fiveInRow;
     return node->value;
   }
@@ -33,14 +28,9 @@ int minmax(GamestateNode* node, int depth, bool shouldMax, char plyPlayer, int a
   GamestateNode* children = node->generateChildren(depth);
   int value;
   for (int i = 0; i < node->_nChildren; i++) {
-    if (shouldMax) {
-      value = minmax(&children[i], depth - 1, !shouldMax, nextPlyPlayer, alpha, beta);
-      alpha = (value > alpha) ? value : alpha; // max(value, alpha)
-    }
-    else {
-      value = minmax(&children[i], depth - 1, !shouldMax, nextPlyPlayer, alpha, beta);
-      beta = (value < beta) ? value : beta; // min(value, beta)
-    }
+    value = minmax(&children[i], depth - 1, !shouldMax, nextPlyPlayer, alpha, beta);
+    if (shouldMax) alpha = (value > alpha) ? value : alpha; // max(value, alpha)
+    else beta = (value < beta) ? value : beta; // min(value, beta)
     if (beta <= alpha) break;
   }
 
@@ -59,45 +49,6 @@ int minmax(GamestateNode* node, int depth, bool shouldMax, char plyPlayer, int a
   node->value = bestValue;
   return node->value;
 }
-
-//void minmax(GamestateNode* node, int depth, bool shouldMax, char plyPlayer) {
-//  node->applyMoveToBoard(plyPlayer);
-//
-//  //if (node->_move == 152 && depth == 1) {
-//  //  int aa = 0;
-//  //}
-//
-//  if (node->checkWin(plyPlayer)) {
-//    // will reward shortest path to win by subtracting ply
-//    node->value = plyPlayer == actingPlayer ? fiveInRow + depth : -fiveInRow;
-//    return;
-//  }
-//
-//  if (depth == 0) {
-//    node->value = node->getBoard()->evaluate(actingPlayer) - 2 * node->getBoard()->evaluate(oppPlayer);
-//    return; // return node->_move;
-//  }
-//
-//  char nextPlyPlayer = plyPlayer == 1 ? 2 : 1;
-//  GamestateNode* children = node->generateChildren(depth);
-//  for (int i = 0; i < node->_nChildren; i++) {
-//    minmax(&children[i], depth - 1, !shouldMax, nextPlyPlayer);
-//  }
-//
-//  // reached top node
-//  if (node->_move == -1) {
-//    GamestateNode* selection = GamestateNode::getBestChild(children, node->_nChildren, shouldMax);
-//    if (selection != 0) {
-//      searchResult.move = selection->_move;
-//      searchResult.value = selection->value;
-//    }
-//    return;
-//  }
-//
-//  const int bestValue = GamestateNode::getValueFromBestChild(children, node->_nChildren, shouldMax);
-//  delete[] children;
-//  node->value = bestValue;
-//}
 
 Search::Search(int depth)
   :depth(depth)
@@ -123,12 +74,12 @@ void Search::doSearch(SearchResult & sr, char actingPlayerStart, Board * board)
   node0->getBoard()->copyBoard(board);
   node0->setMove(-1); // the move is already written into the board
 
-  const int depth = 7; // 3, 5, 7 verkar funka
+  const int depth = 7; // 3, 5, 7 seems to work
 
-  searchResult.move = -2;
+  searchResult.move = -2; // indicating no move found
   actingPlayer = actingPlayerStart;
   oppPlayer = actingPlayer == 1 ? 2 : 1;
-  minmax(node0, depth, true, oppPlayer, -highValue, highValue); // minmax(node0, depth, true, oppPlayer);
+  minmax(node0, depth, true, oppPlayer, -highValue, highValue);
   sr.move = searchResult.move;
   sr.value = searchResult.value;
 

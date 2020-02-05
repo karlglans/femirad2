@@ -3,6 +3,8 @@
 
 #include "IndexGenerator.h"
 
+const char EMPTY_CELL = 0;
+
 short * IndexGenerator::getIndices()
 {
   return _indicesFromCentre;
@@ -52,68 +54,12 @@ const short* IndexGenerator::produceListOfIndecisFromCenter()
 int IndexGenerator::pickFirstFreeIndexFromCentre(char* boardArr, const int row, short* result) {
   int size = row * row;
   for (int i = 0; i < size; i++) {
-    if (boardArr[_indicesFromCentre[i]] == 0) {
+    if (boardArr[_indicesFromCentre[i]] == EMPTY_CELL) {
       result[0] = _indicesFromCentre[i];
       return 1;
     }
   }
   return 0;
-}
-
-
-/**
-* Looking for emty cells neighburing something. Will order indexis of thoe empty cells from inside to out.
-*/
-
-int IndexGenerator::makeInToOutSortedListOfSurroundingCells(char* boardArr, const int row, short* result) {
-  const int size = row * row;
-  int u, v, cell, cIdx, rIdx = 0;
-  for (int i = 0; i < size; i++) {
-    cIdx = _indicesFromCentre[i];
-    cell = boardArr[cIdx];
-    if (cell != 0) {
-      continue;
-    }
-
-    u = cIdx % row;
-    v = cIdx / row;
-
-    // checking directions up/down/left/right
-    if (u != 0 && boardArr[cIdx - 1] != 0) { // has a nighbure to left 
-      goto addPos;
-    }
-    if (u != (row - 1) && boardArr[cIdx + 1] != 0) { // has a nighbure to right 
-      goto addPos;
-    }
-    if (v != 0 && boardArr[cIdx - row] != 0) { // has a nighbure above 
-      goto addPos;
-    }
-    if (v != (row - 1) && boardArr[cIdx + row] != 0) { // has a nighbure bellow 
-      goto addPos;
-    }
-
-
-    if (u != 0 && v != 0 && boardArr[cIdx - row - 1] != 0) { // has a nighbure above left
-      goto addPos;
-    }
-    if (u != (row - 1) && v != 0 && boardArr[cIdx - row + 1] != 0) { // has a nighbure above right
-      goto addPos;
-    }
-    if (u != 0 && v != (row - 1) && boardArr[cIdx + row - 1] != 0) { // has a nighbure below left
-      goto addPos;
-    }
-    else if (u != (row - 1) && v != (row - 1) && boardArr[cIdx + row + 1] != 0) { // has a nighbure below right
-      goto addPos;
-    }
-
-    continue;
-
-    addPos:
-    result[rIdx] = cIdx;
-    rIdx += 1;
-  }
-
-  return rIdx;
 }
 
 
@@ -138,51 +84,80 @@ int IndexGenerator::makeInToOutSortedListOfSurroundingCells(char* boardArr, cons
  *
  */
 
-// not in use
-void IndexGenerator::makeListOfSurroundingCells(char* boardArr, const int row, char* result) {
-  const int isNotASurroundingCell = -1;
-  int idx = 0;
-  // iterates over each position decides if this position is neighbouring some taken cells
-  for (int v = 0; v < row; v++) {
-    for (int u = 0; u < row; u++, idx++) {
-      if (boardArr[idx] != 0) {
-        result[idx] = isNotASurroundingCell;
-      }
-      else {
+/**
+* Looking for emty cells neighburing something. Will order indexis of thoe empty cells from inside to out.
+*/
+int IndexGenerator::makeInToOutSortedListOfSurroundingCells(char* boardArr, const int row, short* result) {
+  const int size = row * row;
+  int u, v, cell, cIdx, rIdx = 0;
+  for (int i = 0; i < size; i++) {
+    cIdx = _indicesFromCentre[i];
+    cell = boardArr[cIdx];
+    if (cell != EMPTY_CELL) {
+      continue;
+    }
 
-        // checking directions up/down/left/right
-        if (u != 0 && boardArr[idx - 1] != 0) {
-          result[idx] = idx;
-        }
-        else if (u != (row - 1) && boardArr[idx + 1] != 0) {
-          result[idx] = idx;
-        }
-        else if (v != 0 && boardArr[idx - row] != 0) {
-          result[idx] = idx;
-        }
-        else if (v != (row - 1) && boardArr[idx + row] != 0) {
-          result[idx] = idx;
+    u = cIdx % row;
+    v = cIdx / row;
 
-          // diagonals
-        }
-        else if (u != 0 && v != 0 && boardArr[idx - row - 1] != 0) {
-          result[idx] = idx;
-        }
-        else if (u != (row - 1) && v != 0 && boardArr[idx - row + 1] != 0) {
-          result[idx] = idx;
-        }
-        else if (u != 0 && v != (row - 1) && boardArr[idx + row - 1] !=  0) {
-          result[idx] = idx;
-        }
-        else if (u != (row - 1) && v != (row - 1) && boardArr[idx + row + 1] != 0) {
-          result[idx] = idx;
+    // checking directions up/down/left/right
+    if (u != 0 && boardArr[cIdx - 1] != EMPTY_CELL) { // has a nighbure to left 
+      goto addPos;
+    }
+    if (u != (row - 1) && boardArr[cIdx + 1] != EMPTY_CELL) { // has a nighbure to right 
+      goto addPos;
+    }
+    if (v != 0 && boardArr[cIdx - row] != EMPTY_CELL) { // has a nighbure above 
+      goto addPos;
+    }
+    if (v != (row - 1) && boardArr[cIdx + row] != EMPTY_CELL) { // has a nighbure bellow 
+      goto addPos;
+    }
 
-        }
-        else {
-          result[idx] = isNotASurroundingCell;
-        }
+
+    if (u != 0 && v != 0 && boardArr[cIdx - row - 1] != EMPTY_CELL) { // has a nighbure above left
+      goto addPos;
+    }
+    if (u != (row - 1) && v != 0 && boardArr[cIdx - row + 1] != EMPTY_CELL) { // has a nighbure above right
+      goto addPos;
+    }
+    if (u != 0 && v != (row - 1) && boardArr[cIdx + row - 1] != EMPTY_CELL) { // has a nighbure below left
+      goto addPos;
+    }
+    else if (u != (row - 1) && v != (row - 1) && boardArr[cIdx + row + 1] != EMPTY_CELL) { // has a nighbure below right
+      goto addPos;
+    }
+
+    continue;
+
+    addPos:
+    result[rIdx] = cIdx;
+    rIdx += 1;
+  }
+
+  return rIdx;
+}
+
+/**
+ * should move all good lookers to the begining of result;
+ */
+
+int IndexGenerator::moveGoodLookersBegining(short* result, int nRes, short* goodLookers) {
+  if (goodLookers[0] == -1) return 0;
+  int nFound = 0;
+  for (int i = 0; i < 1; i++) {
+    short goodLooker = goodLookers[i];
+    if (goodLooker == -1) return nFound;
+    for (int r = 0; r < nRes; r++) {
+      if (result[r] == goodLooker) {
+        // swap
+        short buff = result[nFound];
+        result[nFound] = goodLooker;
+        result[r] = buff;
+        nFound++;
       }
     }
   }
+  return nFound;
 }
 

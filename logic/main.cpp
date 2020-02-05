@@ -19,13 +19,27 @@ int main() {
   board = new Board();
   board->clean();
   //board->setCell(120, 1);
-  //board->setCell(119, 2);
+  //board->setCell(135, 2);
+  //board->setCell(119, 1);
+  //board->setCell(136, 2);
+  //board->setCell(103, 1);
+  //board->setCell(137, 2);
+  //board->setCell(138, 1);
+  //board->setCell(151, 2);
+  //board->setCell(121, 1);
+  //board->setCell(118, 2);
+  //game->setPly(10);
+  // should give 108 or 106
+
+
+
+
   //board->setCell(136, 1);
   //board->setCell(135, 2);
   //game->setPly(4);
   #ifdef USE_EMSCRIPTEN
 	EM_ASM_({
-	    console.log("main() done v20, row:", $0);
+	    console.log("main() done v22, row:", $0);
 	}, BOARD_ROW);
 #endif
 	return 0;

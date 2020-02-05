@@ -3,7 +3,7 @@
 
 IndexGenerator* GamestateNode::indexGen = 0;
 short* GamestateNode::premadeIndecis = 0; // maybe guard better
-const int MAX_CHIL = 10;
+const int MAX_CHIL = 10; // not in use
 
 void GamestateNode::setIndexGenerator(IndexGenerator * indexGen)
 {
@@ -86,21 +86,22 @@ GamestateNode * GamestateNode::getBestChild(GamestateNode * nodes, int nNodes, b
 short indexBuffer[BOARD_ROW * BOARD_ROW]; // internal buffer 
 
 int GamestateNode::generateChildMoves(int depth) {
-  int nChildren = 0;
   const char* boardCells = board.getBoard();
   const int max_board_cells = board.getSize();
-  bool isTopLayer = _move == -1;
-  
-  //// farlig!
-  //if (isTopLayer) {
-    nChildren = GamestateNode::indexGen->makeInToOutSortedListOfSurroundingCells(
+  //bool isTopLayer = _move == -1;
+
+  int nChildren = GamestateNode::indexGen->makeInToOutSortedListOfSurroundingCells(
+    (char*)boardCells, board.getRow(), indexBuffer);
+  if (nChildren == 0) {
+    nChildren = GamestateNode::indexGen->pickFirstFreeIndexFromCentre(
       (char*)boardCells, board.getRow(), indexBuffer);
-    if (nChildren == 0) {
-      return GamestateNode::indexGen->pickFirstFreeIndexFromCentre(
-        (char*)boardCells, board.getRow(), indexBuffer);
-    }
-    return nChildren;
-  //}
+  }
+  if (nChildren != 0) {
+    //GamestateNode::indexGen->moveGoodLookersBeginning(indexBuffer, nChildren, board.getGoodLookers());
+  }
+
+  // moveGoodLookersBegining
+  return nChildren;
 
   //for (int cc = 0; cc < max_board_cells; cc++) {
   //  int nextIdx = premadeIndecis[cc];
@@ -114,20 +115,10 @@ int GamestateNode::generateChildMoves(int depth) {
 
 GamestateNode* GamestateNode::generateChildren(int depth)
 {
-  //int nChildren = 0;
-  //const char* boardCells = board.getBoard();
-  //const int max_board_cells = board.getSize();
-  //for (int cc = 0; cc < max_board_cells; cc++) {
-  //  int nextIdx = premadeIndecis[cc];
-  //  if (nChildren < MAX_CHIL && boardCells[nextIdx] == 0) {
-  //    indexBuffer[nChildren] = nextIdx;
-  //    nChildren++;
-  //  }
-  //}
   int nChildren = generateChildMoves(depth);
   GamestateNode* children = new GamestateNode[nChildren];
   for (int c = 0; c < nChildren; c++) {
-    children[c].copyBoard(&board); // verkar inte kopiera
+    children[c].copyBoard(&board);
     children[c].setMove(indexBuffer[c]);
   }
   _nChildren = nChildren;

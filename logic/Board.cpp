@@ -9,7 +9,7 @@ Board::Board()
 
 void Board::clean() {
   for (int c = 0; c < getSize(); c++) {
-    _board[c] = 0;
+    _board[c] = EMPTY_CELL;
   }
 }
 
@@ -76,10 +76,17 @@ bool Board::isValidMove(const int move) {
   return _board[move] == 0;
 }
 
+void Board::storeGoodCell(short cellIdx, int value) {
+  // goodCellList.store(cellIdx, value);
+}
+
+// TODO idea: just look examine the area around the last changed cell
 int Board::evaluateWin(const int team) {
   const int row = Board::row;
   const char* _board = this->_board;
   int accValue = 0; // consider maybe not accumelate points, instead just return after 5 cells in row
+
+  //goodLookers[0] = -1;
 
   // combines vertical and horizontal 
   int i, j, idxHor = 0, idxVer = 0, horLineCount = 0, verLineCount = 0;
@@ -94,6 +101,11 @@ int Board::evaluateWin(const int team) {
           horLineCount = 0;
         }
       } else {
+        /////// tött
+        //if (horLineCount == 4) {
+        //  storeGoodCell(idxHor, open4row);
+        //}
+        ///////
         horLineCount = 0;
       }
       if (_board[idxVer] == team) {
@@ -103,6 +115,11 @@ int Board::evaluateWin(const int team) {
           verLineCount = 0;
         }
       } else {
+        /////// tött
+        //if (verLineCount == 4) {
+        //  storeGoodCell(idxVer, open4row);
+        //}
+        ///////
         verLineCount = 0;
       }
       // orthogonal steps
@@ -142,6 +159,11 @@ int Board::evaluateWin(const int team) {
         }
       }
       else {
+        /////// tött
+        //if (fallLineCellCount == 4) {
+        //  storeGoodCell(idxFall, open4row);
+        //}
+        ///////
         fallLineCellCount = 0;
       }
       if (_board[idxRise] == team) {
@@ -151,6 +173,11 @@ int Board::evaluateWin(const int team) {
           riseLineCellCount = 0;
         }
       } else {
+        /////// tött
+        //if (riseLineCellCount == 4) {
+        //  storeGoodCell(idxRise, open4row);
+        //}
+        ///////
         riseLineCellCount = 0;
       }
       // vertical steps upwards towards index 0
@@ -162,7 +189,7 @@ int Board::evaluateWin(const int team) {
   return accValue; // accValue
 }
 
-const int cellTypeOpen = 0; // could still be taken
+// const int cellTypeOpen = 0; // could still be taken
 
 int Board::evaluate(int team) {
   //const { board, row } = this;
@@ -190,7 +217,7 @@ int Board::evaluate(int team) {
       if (horLineCount > 0 && (isLastRowI || board[idxHor] != team)) {
         if (isLastRowI && board[idxHor] == team) horLineCount += 1;
         if (horLineCount > 1) {
-          countClosedSides = board[idxHor] != cellTypeOpen ? 1 : 0;
+          countClosedSides = board[idxHor] != EMPTY_CELL ? 1 : 0;
           if (!horOpenBegining) countClosedSides += 1;
           if (countClosedSides < 2) {
             if (horLineCount == 2) accValue += countClosedSides == 0 ? open2cells : semiOpen2cells;
@@ -206,7 +233,7 @@ int Board::evaluate(int team) {
       if (!isLastRowI && board[idxHor] == team) {
         horLineCount += 1;
       } else {
-        horOpenBegining = board[idxHor] == cellTypeOpen;
+        horOpenBegining = board[idxHor] == EMPTY_CELL;
         horLineCount = 0;
       }
 
@@ -216,7 +243,7 @@ int Board::evaluate(int team) {
       if (verLineCount > 0 && (isLastRowI || board[idxVer] != team)) {
         if (isLastRowI && board[idxVer] == team) verLineCount += 1;
         if (verLineCount > 1) {
-          countClosedSides = board[idxVer] != cellTypeOpen ? 1 : 0;
+          countClosedSides = board[idxVer] != EMPTY_CELL ? 1 : 0;
           if (!verOpenBegining) countClosedSides += 1;
           if (countClosedSides < 2) {
             if (verLineCount == 2) accValue += countClosedSides == 0 ? open2cells : semiOpen2cells;
@@ -232,7 +259,7 @@ int Board::evaluate(int team) {
       if (!isLastRowI && board[idxVer] == team) {
         verLineCount += 1;
       } else {
-        verOpenBegining = board[idxVer] == cellTypeOpen;
+        verOpenBegining = board[idxVer] == EMPTY_CELL;
         verLineCount = 0;
       }
 
@@ -286,7 +313,7 @@ int Board::evaluate(int team) {
       if (fallLineCellCount > 0 && (isLastRowI || board[idxFall] != team)) {
         if (isLastRowI && board[idxFall] == team) fallLineCellCount += 1;
         if (fallLineCellCount > 1) {
-          countClosedSides = board[idxFall] != cellTypeOpen ? 1 : 0;
+          countClosedSides = board[idxFall] != EMPTY_CELL ? 1 : 0;
           if (!fallOpenBegining) countClosedSides += 1;
           if (countClosedSides < 2) {
             if (fallLineCellCount == 2) accValue += countClosedSides == 0 ? open2cells : semiOpen2cells;
@@ -303,14 +330,14 @@ int Board::evaluate(int team) {
       if (!isLastRowI && board[idxFall] == team) {
         fallLineCellCount += 1;
       } else {
-        fallOpenBegining = board[idxFall] == cellTypeOpen;
+        fallOpenBegining = board[idxFall] == EMPTY_CELL;
         fallLineCellCount = 0;
       }
 
       if (riseLineCellCount > 0 && (isLastRowI || board[idxRise] != team)) {
         if (isLastRowI && board[idxRise] == team) riseLineCellCount += 1;
         if (riseLineCellCount > 1) {
-          countClosedSides = board[idxRise] != cellTypeOpen ? 1 : 0;
+          countClosedSides = board[idxRise] != EMPTY_CELL ? 1 : 0;
           if (!riseOpenBegining) countClosedSides += 1;
           if (countClosedSides < 2) {
             if (riseLineCellCount == 2) accValue += countClosedSides == 0 ? open2cells : semiOpen2cells;
@@ -327,7 +354,7 @@ int Board::evaluate(int team) {
       if (!isLastRowI && board[idxRise] == team) {
         riseLineCellCount += 1;
       } else {
-        riseOpenBegining = board[idxRise] == cellTypeOpen;
+        riseOpenBegining = board[idxRise] == EMPTY_CELL;
         riseLineCellCount = 0;
       }
 
