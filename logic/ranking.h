@@ -4,9 +4,11 @@
 const int semiOpen2cells = 1;
 const int semiOpen3cells = 2;
 const int semiOpen4row = 4;
+const int semiOpen4cells = 4;
 const int open2cells = 6;
 const int open3cells = 12;
+const int open4cells = 900; // win.
 const int open4row = 900; // win.
-const int fiveInRow = 1000;
+const int fiveInRow = 100000;
 
 #endif

@@ -25,6 +25,7 @@ public:
   void setCell(int cellIdx, int player);
   int evaluateWin(int team);
   int evaluate(int team);
+  int evaluatePositions(int team, int* pPosValue);
   bool isValidMove(int move);
 
   void storeGoodCell(short cellIdx, int value);
