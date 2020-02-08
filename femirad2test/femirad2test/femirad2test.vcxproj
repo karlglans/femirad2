@@ -34,6 +34,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClInclude Include="..\..\logic\Board.h" />
+    <ClInclude Include="..\..\logic\Boardevaluator.h" />
     <ClInclude Include="..\..\logic\common_types.h" />
     <ClInclude Include="..\..\logic\config.h" />
     <ClInclude Include="..\..\logic\Game.h" />
@@ -45,12 +46,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\logic\Board.cpp" />
+    <ClCompile Include="..\..\logic\Boardevaluator.cpp" />
     <ClCompile Include="..\..\logic\Game.cpp" />
     <ClCompile Include="..\..\logic\GamestateNode.cpp" />
     <ClCompile Include="..\..\logic\GoodCellList.cpp" />
     <ClCompile Include="..\..\logic\IndexGenerator.cpp" />
     <ClCompile Include="..\..\logic\Search.cpp" />
     <ClCompile Include="Board.test.cpp" />
+    <ClCompile Include="Boardevaluator.test.cpp" />
     <ClCompile Include="Board_evaluatePositions.test.cpp" />
     <ClCompile Include="GoodCellList.test.cpp" />
     <ClCompile Include="IndexGenerator.test.cpp" />

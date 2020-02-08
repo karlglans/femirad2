@@ -45,6 +45,9 @@
     <ClInclude Include="GoodCellList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Boardevaluator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -66,6 +69,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GoodCellList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Boardevaluator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
