@@ -1,13 +1,22 @@
 #include "Search.h"
 #include "GamestateNode.h"
 #include "IndexGenerator.h"
+#include "Boardevaluator.h"
 #include "ranking.h"
 
 SearchResult searchResult;
 char actingPlayer;
 char oppPlayer;
+Boardevaluator bordeval;
 
-const int highValue = fiveInRow * 100;
+Search::Search(int depth)
+  :depth(depth)
+{
+}
+
+Search::~Search()
+{
+}
 
 
 int minmax(GamestateNode* const node, int depth, bool shouldMax, char plyPlayer, int alpha, int beta) {
@@ -15,17 +24,18 @@ int minmax(GamestateNode* const node, int depth, bool shouldMax, char plyPlayer,
   
   if (node->checkWin(plyPlayer)) {
     // will reward shortest path to win by adding depth
-    node->value = plyPlayer == actingPlayer ? fiveInRow + depth : -fiveInRow;
+    node->value = plyPlayer == actingPlayer ? fiveInRow + depth : -fiveInRow; // -fiveInRow
     return node->value;
   }
   
   if (depth == 0) {
-    node->value = node->getBoard()->evaluate(actingPlayer) -2 * node->getBoard()->evaluate(oppPlayer);
-    return node->_move; // return node->_move;
+    node->value = bordeval.evaluateCell(node->_move, node->board.getBoard(), node->board.getRow(), actingPlayer);
+    //node->value = node->getBoard()->evaluate(actingPlayer) -2 * node->getBoard()->evaluate(oppPlayer);
+    return node->_move;
   }
 
   char nextPlyPlayer = plyPlayer == 1 ? 2 : 1;
-  GamestateNode* children = node->generateChildren(depth);
+  GamestateNode* children = node->generateChildren(depth, nextPlyPlayer); // nextPlyPlayer
   int value;
   for (int i = 0; i < node->_nChildren; i++) {
     value = minmax(&children[i], depth - 1, !shouldMax, nextPlyPlayer, alpha, beta);
@@ -50,36 +60,20 @@ int minmax(GamestateNode* const node, int depth, bool shouldMax, char plyPlayer,
   return node->value;
 }
 
-Search::Search(int depth)
-  :depth(depth)
-{
-}
-
-Search::~Search()
-{
-}
-
 void Search::doSearch(SearchResult & sr, char actingPlayerStart, Board * board)
 {
   // maybe move since it can be reused
   const int row = board->getRow();
-
-  // maybe do this once in main
-  IndexGenerator indexGen(row);
-  GamestateNode::setIndexGenerator(&indexGen);
-  GamestateNode::premadeIndecis = indexGen.getIndices(); // start from possible indecis
 
   // node0 is the current gameboard. It contains the move from previus player
   GamestateNode* node0 = new GamestateNode();
   node0->getBoard()->copyBoard(board);
   node0->setMove(-1); // the move is already written into the board
 
-  const int depth = 5; // 3, 5, 7 seems to work
-
-  searchResult.move = -2; // indicating no move found
+  searchResult.move = -22; // indicating no move found. should not happen
   actingPlayer = actingPlayerStart;
   oppPlayer = actingPlayer == 1 ? 2 : 1;
-  minmax(node0, depth, true, oppPlayer, -highValue, highValue);
+  minmax(node0, depth, true, oppPlayer, -max_value, max_value);
   sr.move = searchResult.move;
   sr.value = searchResult.value;
 

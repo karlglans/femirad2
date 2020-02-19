@@ -88,18 +88,8 @@ TEST(Board, evaluateWin_can_detect_horizontal_line) {
   EXPECT_EQ(board.evaluateWin(1), 3 * fiveInRow);
 }
 
-TEST(Board, evaluate_line2_hor_open_combinatios) {
-  Board board(8);
-  char brd[] = {
-    0, 0, 0, 0, 1, 1, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 1, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 1, 1, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 1, 1, 0, 0, 0, 0 };
-  board.setBoard(brd);
-  EXPECT_EQ(board.evaluate(1), 4 * open2cells);
+TEST(Board, getCellPly0) {
+  Board board(16);
+  EXPECT_EQ(board.getCellPly0(), 119);
 }
 

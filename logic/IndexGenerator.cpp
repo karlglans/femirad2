@@ -1,10 +1,11 @@
-#include <algorithm>    // std::sort
-#include <vector>       // std::vector
+#include <algorithm>
+#include <vector>
 
 #include "IndexGenerator.h"
 
 const char EMPTY_CELL = 0;
 
+// TODO maybe remove class. Not in use atm
 short * IndexGenerator::getIndices()
 {
   return _indicesFromCentre;
@@ -137,27 +138,3 @@ int IndexGenerator::makeInToOutSortedListOfSurroundingCells(char* boardArr, cons
 
   return rIdx;
 }
-
-/**
- * should move all good lookers to the begining of result;
- */
-
-int IndexGenerator::moveGoodLookersBegining(short* result, int nRes, short* goodLookers) {
-  if (goodLookers[0] == -1) return 0;
-  int nFound = 0;
-  for (int i = 0; i < 1; i++) {
-    short goodLooker = goodLookers[i];
-    if (goodLooker == -1) return nFound;
-    for (int r = 0; r < nRes; r++) {
-      if (result[r] == goodLooker) {
-        // swap
-        short buff = result[nFound];
-        result[nFound] = goodLooker;
-        result[r] = buff;
-        nFound++;
-      }
-    }
-  }
-  return nFound;
-}
-

@@ -11,4 +11,6 @@ const int open4cells = 900; // win.
 const int open4row = 900; // win.
 const int fiveInRow = 100000;
 
+const int max_value = 10000000; // fiveInRow * 100 
+
 #endif

@@ -18,18 +18,41 @@ int main() {
   game = new Game();
   board = new Board();
   board->clean();
-  //board->setCell(120, 1);
-  //board->setCell(135, 2);
-  //board->setCell(119, 1);
-  //board->setCell(136, 2);
-  //board->setCell(103, 1);
-  //board->setCell(137, 2);
-  //board->setCell(138, 1);
-  //board->setCell(151, 2);
-  //board->setCell(121, 1);
-  //board->setCell(118, 2);
-  //game->setPly(10);
-  // should give 108 or 106
+
+  int situation = 0;
+  if (situation == 1) {
+    // depth 7:10 bordeval  5.91s
+    // depth 7:10 moveeval  0.87s
+    // should give 108 or 106
+    board->setCell(120, 1);
+    board->setCell(135, 2);
+    board->setCell(119, 1);
+    board->setCell(136, 2);
+    board->setCell(103, 1);
+    board->setCell(137, 2);
+    board->setCell(138, 1);
+    board->setCell(151, 2);
+    board->setCell(121, 1);
+    board->setCell(118, 2);
+    game->setPly(10);
+  } else if (situation == 2) {
+    board->setCell(119, 1);
+    board->setCell(120, 2);
+    board->setCell(118, 1);
+    board->setCell(103, 2);
+    board->setCell(134, 1);
+    board->setCell(137, 2);
+    board->setCell(133, 1);
+    board->setCell(86, 2);
+    game->setPly(8);
+  } else if (situation == 3) {
+    board->setCell(119, 1);
+    board->setCell(104, 2);
+    board->setCell(102, 1);
+    board->setCell(121, 2);
+    board->setCell(85, 1);
+    game->setPly(5);
+  }
 
 
 
@@ -39,7 +62,7 @@ int main() {
   //game->setPly(4);
   #ifdef USE_EMSCRIPTEN
 	EM_ASM_({
-	    console.log("main() done v22, row:", $0);
+	    console.log("main() done v23 ev, row:", $0);
 	}, BOARD_ROW);
 #endif
 	return 0;
@@ -69,10 +92,17 @@ extern "C" int doNextMove(int depth, char* board_ptr) {
 #endif
     return -1; // 1
   }
+
   Search search(depth);
   SearchResult sr;
   const int actingPlayer = game->getActingTeam();
-  search.doSearch(sr, actingPlayer, board);
+  if (game->getPly() == 0) {
+    sr.move = board->getCellPly0();
+    sr.value = 1;
+  }
+  else {
+    search.doSearch(sr, actingPlayer, board);
+  }
   if (!board->isValidMove(sr.move)) return -1;
   board->setCell(sr.move, actingPlayer); 
   //board_ptr[sr.move] = game->getActingTeam();

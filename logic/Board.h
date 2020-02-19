@@ -9,8 +9,6 @@
 class Board
 {
   static int row;
-  //static GoodCellList goodCellList;
-  //static void storeGoodCell(short cellIdx, short value);
 private:
 	char _board[BOARD_ROW * BOARD_ROW];
 public:
@@ -24,11 +22,8 @@ public:
   int getSize();
   void setCell(int cellIdx, int player);
   int evaluateWin(int team);
-  int evaluate(int team);
-  int evaluatePositions(int team, int* pPosValue);
+  int getCellPly0();
   bool isValidMove(int move);
-
-  void storeGoodCell(short cellIdx, int value);
   
 	Board();
   Board(int row);

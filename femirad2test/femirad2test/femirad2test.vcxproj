@@ -54,7 +54,6 @@
     <ClCompile Include="..\..\logic\Search.cpp" />
     <ClCompile Include="Board.test.cpp" />
     <ClCompile Include="Boardevaluator.test.cpp" />
-    <ClCompile Include="Board_evaluatePositions.test.cpp" />
     <ClCompile Include="GoodCellList.test.cpp" />
     <ClCompile Include="IndexGenerator.test.cpp" />
     <ClCompile Include="Search.test.cpp" />
