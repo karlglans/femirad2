@@ -7,9 +7,9 @@
 
 class GamestateNode
 {
-  static IndexGenerator* indexGen;
+  //static IndexGenerator* indexGen;
 public:
-  static void setIndexGenerator(IndexGenerator* indexGen);
+  //static void setIndexGenerator(IndexGenerator* indexGen);
   //GamestateNode* parent;
   move _move;
   Board board;
@@ -22,9 +22,9 @@ public:
   static int getValueFromBestChild(GamestateNode* nodes, int nNodes, bool max);
   static GamestateNode* getBestChild(GamestateNode* nodes, int nNodes, bool max);
   static short* premadeIndecis;
-  GamestateNode* generateChildren(int depth);
+  GamestateNode* generateChildren(int depth, int team);
   bool checkWin(int team);
-  int generateChildMoves(int depth);
+  int generateChildMoves(int depth, int team);
 
   GamestateNode();
   ~GamestateNode();

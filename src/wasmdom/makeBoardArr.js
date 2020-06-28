@@ -35,7 +35,7 @@ export function releaseWasm() {
 export function markEmptyCell(cellIdx) {
   if (boarBufferPtr !==  -1) {
     const retV = window.Module.ccall('markEmptyCell', 'number', ['*', 'i32'], [boarBufferPtr, cellIdx]);
-    console.log('retV', retV);
+    console.log('retV', retV, cellIdx);
     return retV === 0;
   } 
   return false; 
@@ -45,8 +45,12 @@ export function markEmptyCell(cellIdx) {
  * @return {bool} gameIsOver
  */
 export function doNextMove() {
-  const searchDepth = 3;
-  return window.Module.ccall('doNextMove', 'i32', ['i32', '*'], [searchDepth, boarBufferPtr]);
+  const searchDepth = 11; // odd numbers [3, 5, 7, 9]
+  const t1 = performance.now();
+  const result = window.Module.ccall('doNextMove', 'i32', ['i32', '*'], [searchDepth, boarBufferPtr]);
+  const t2 = performance.now()
+  console.log('move done', (t2 - t1) * 0.001);
+  return result;
 }
 
 export function copyBoardBuffer() {

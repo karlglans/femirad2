@@ -31,7 +31,7 @@ TEST(IndexGenerator, makeInToOutSortedListOfSurroundingCells) {
     0, 0, 0, 0,
     0, 0, 0, 0 };
   board.setBoard(brd);
-  short result[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, };
+  short result[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, };
   IndexGenerator indexGen(row);
   int nResult = indexGen.makeInToOutSortedListOfSurroundingCells(brd, row, result);
   EXPECT_EQ(result[8], 0); // should not be a 9th result
@@ -39,26 +39,3 @@ TEST(IndexGenerator, makeInToOutSortedListOfSurroundingCells) {
   EXPECT_EQ(nResult, 8);
 }
 
-TEST(IndexGenerator, moveGoodLookersBegining_one_good_looker) {
-  short result[] = { 1, 12, 13, 4, 5, 6 };
-  short goodLookers[] = { 13, -1, 3, 4, 5, 6 };
-  const int row = 4;
-  IndexGenerator indexGen(row);
-  int nResult = indexGen.moveGoodLookersBegining(result, 6, goodLookers);
-  
-  EXPECT_EQ(result[0], 13);
-  EXPECT_EQ(result[1], 12);
-  EXPECT_EQ(result[2], 1);
-}
-
-//TEST(IndexGenerator, moveGoodLookersBegining_two_good_looker) {
-//  short result[] = { 1, 12, 13, 4, 5, 6 };
-//  short goodLookers[] = { 13, 3, 4, -1 }; // note 3 is missing in result, should be ok
-//  const int row = 4;
-//  IndexGenerator indexGen(row);
-//  int nResult = indexGen.moveGoodLookersBegining(result, 6, goodLookers);
-//
-//  EXPECT_EQ(result[0], 13);
-//  EXPECT_EQ(result[1], 12);
-//  EXPECT_EQ(result[2], 1);
-//}
